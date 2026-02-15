@@ -1,0 +1,66 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  --mood-bg: #ffffff;
+  --mood-text: #213547;
+  --mood-accent: #646cff;
+  --mood-secondary: #f9f9f9;
+
+  color-scheme: light dark;
+  color: var(--mood-text);
+  background-color: var(--mood-bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Mood Themes */
+.mood-happy {
+  --mood-bg: #FFF9C4; /* Light Yellow */
+  --mood-text: #F57F17; /* Dark Orange */
+  --mood-accent: #FFD600; /* Bright Yellow */
+  --mood-secondary: #FFFDE7;
+}
+
+.mood-sad {
+  --mood-bg: #E3F2FD; /* Light Blue */
+  --mood-text: #0D47A1; /* Dark Blue */
+  --mood-accent: #2196F3; /* Medium Blue */
+  --mood-secondary: #E1F5FE;
+}
+
+.mood-anxious {
+  --mood-bg: #E8F5E9; /* Light Green */
+  --mood-text: #1B5E20; /* Dark Green */
+  --mood-accent: #4CAF50; /* Medium Green */
+  --mood-secondary: #F1F8E9;
+}
+
+.mood-energetic {
+  --mood-bg: #FFEBEE; /* Light Red */
+  --mood-text: #B71C1C; /* Dark Red */
+  --mood-accent: #F44336; /* Medium Red */
+  --mood-secondary: #FFEBEE;
+}
