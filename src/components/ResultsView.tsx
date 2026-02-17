@@ -86,11 +86,11 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
     const rawYouTubeLink = data.music?.youtubeUrl || (data.music?.title?.includes('http') ? data.music.title : `https://www.youtube.com/results?search_query=${encodeURIComponent(data.music?.title + ' ' + data.music?.artist)}`);
 
     const medalTable = [
-        { rank: 1, country: "Norway", flag: "🇳🇴" },
-        { rank: 2, country: "Germany", flag: "🇩🇪" },
-        { rank: 3, country: "USA", flag: "🇺🇸" },
-        { rank: 4, country: "Italy", flag: "🇮🇹" },
-        { rank: 5, country: "Canada", flag: "🇨🇦" }
+        { rank: 1, country: "Norway", flag: "🇳🇴", gold: 16, silver: 8, bronze: 13 },
+        { rank: 2, country: "Germany", flag: "🇩🇪", gold: 12, silver: 10, bronze: 5 },
+        { rank: 3, country: "USA", flag: "🇺🇸", gold: 8, silver: 10, bronze: 7 },
+        { rank: 4, country: "Italy", flag: "🇮🇹", gold: 2, silver: 7, bronze: 8 },
+        { rank: 5, country: "Canada", flag: "🇨🇦", gold: 4, silver: 8, bronze: 14 }
     ];
 
     return (
@@ -194,9 +194,16 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
                             </h4>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '8px' }}>
                                 {medalTable.map((item) => (
-                                    <div key={item.rank} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '8px', background: 'white', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.03)' }}>
-                                        <span style={{ fontSize: '1.2rem' }}>{item.flag}</span>
-                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--winter-text-light)' }}>{item.country}</span>
+                                    <div key={item.rank} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px', background: 'white', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.03)' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
+                                            <span style={{ fontSize: '1.2rem' }}>{item.flag}</span>
+                                            <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>{item.country}</span>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                                            <span title="Gold" style={{ color: '#d4af37' }}>🥇{item.gold}</span>
+                                            <span title="Silver" style={{ color: '#aaa9ad' }}>🥈{item.silver}</span>
+                                            <span title="Bronze" style={{ color: '#cd7f32' }}>🥉{item.bronze}</span>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
