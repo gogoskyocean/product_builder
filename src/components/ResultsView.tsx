@@ -170,7 +170,7 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
                 </div>
 
                 {/* Olympics Section */}
-                <div className="card">
+                <div className="card full-width">
                     <div className="card-header">
                         <Trophy className="icon" size={24} />
                         <h3>{t.olympicHeader}</h3>
