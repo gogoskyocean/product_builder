@@ -19,7 +19,14 @@ function App() {
       setResult(analysis);
     } catch (error) {
       console.error("Failed to analyze mood", error);
-      alert("Sorry, I couldn't understand your mood right now. Please try again.");
+      // Even if everything else fails, ensure the user sees something.
+      setResult({
+        moodSummary: language === 'kr' ? "지금은 감정을 분석하기 어려운 상태입니다. 잠시 휴식을 취해보시는 건 어떨까요?" : "I'm having a bit of trouble analyzing this right now. How about taking a small break?",
+        music: { title: "Spiritual Journey", artist: "Meditation", youtubeUrl: "https://www.youtube.com/embed/S2pETo0zY-U" },
+        articles: [{ title: "Mental Health Resources", url: "https://www.who.int" }],
+        items: [{ name: "Herbal Tea", link: "https://www.amazon.com" }],
+        olympics: { sport: "Curling", reason: "Cooling down and focusing.", highlightUrl: "https://www.youtube.com/user/olympic" }
+      });
     } finally {
       setLoading(false);
     }

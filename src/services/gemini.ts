@@ -1,6 +1,6 @@
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
-import type { Language } from '../types';
+import type { Language, MoodAnalysisResult } from '../types';
 
 export const analyzeMood = async (text: string, language: Language) => {
   const getFallbackResult = (lang: Language): MoodAnalysisResult => {
