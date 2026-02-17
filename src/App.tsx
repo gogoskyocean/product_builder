@@ -2,6 +2,7 @@ import { useState } from 'react';
 import HeroSection from './components/HeroSection';
 import LanguageSwitch from './components/LanguageSwitch';
 import ResultsView from './components/ResultsView';
+import StaticPages from './components/StaticPages';
 import { analyzeMood } from './services/gemini';
 import type { MoodAnalysisResult, Language } from './types';
 import './App.css';
@@ -11,6 +12,7 @@ function App() {
   const [language, setLanguage] = useState<Language>('en');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<MoodAnalysisResult | null>(null);
+  const [activePage, setActivePage] = useState<'main' | 'about' | 'privacy' | 'contact'>('main');
 
   const handleMoodSubmit = async (input: string) => {
     setLoading(true);
@@ -34,6 +36,7 @@ function App() {
 
   const handleReset = () => {
     setResult(null);
+    setActivePage('main');
   };
 
   return (
@@ -46,7 +49,9 @@ function App() {
       </header>
 
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        {loading ? (
+        {activePage !== 'main' ? (
+          <StaticPages page={activePage as any} language={language} onBack={handleReset} />
+        ) : loading ? (
           <div className="loading-container" style={{ textAlign: 'center', color: 'var(--winter-deep-blue)' }}>
             <Loader2 className="animate-spin" size={48} style={{ margin: '0 auto 1rem' }} />
             <p style={{ fontSize: '1.2rem', fontWeight: 600 }}>
@@ -70,8 +75,15 @@ function App() {
         )}
       </main>
 
-      <footer style={{ textAlign: 'center', padding: '1rem', color: 'var(--winter-text-light)', fontSize: '0.8rem' }}>
-        © 2026 Mood-Path AI. Global Emotional Curation Service.
+      <footer className="app-footer">
+        <div className="footer-content">
+          <p>© 2026 Mood-Path AI. Global Emotional Curation Service.</p>
+          <div className="footer-links">
+            <span onClick={() => setActivePage('about')}>About</span>
+            <span onClick={() => setActivePage('privacy')}>Privacy Policy</span>
+            <span onClick={() => setActivePage('contact')}>Contact</span>
+          </div>
+        </div>
       </footer>
     </div>
   );
