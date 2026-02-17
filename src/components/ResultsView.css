@@ -204,6 +204,52 @@
     border-color: var(--winter-deep-blue);
 }
 
+/* AdSense Styles */
+.adsense-container {
+    width: 100%;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.adsense-card {
+    width: 100%;
+    max-width: 970px;
+    /* Standard wide leaderboard width or responsive */
+    background: rgba(241, 245, 249, 0.5);
+    border: 1px dashed rgba(100, 116, 139, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.adsense-label {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: white;
+    padding: 0 8px;
+    font-size: 0.7rem;
+    color: var(--winter-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.adsense-content {
+    font-family: 'Inter', sans-serif;
+    color: var(--winter-text-light);
+    font-size: 0.9rem;
+    opacity: 0.6;
+    font-weight: 500;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .grid-layout {

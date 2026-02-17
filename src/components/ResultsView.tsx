@@ -212,6 +212,16 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
                 </div>
             </div>
 
+            {/* AdSense Placeholder */}
+            <div className="adsense-container">
+                <div className="adsense-card">
+                    <span className="adsense-label">Advertisement</span>
+                    <div className="adsense-content">
+                        Google AdSense Space
+                    </div>
+                </div>
+            </div>
+
             <button className="back-btn" onClick={onReset}>
                 <ArrowLeft size={18} style={{ marginRight: '8px', display: 'inline' }} />
                 {t.back}
