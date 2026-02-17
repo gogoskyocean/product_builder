@@ -7,6 +7,7 @@ export interface MoodAnalysisResult {
     music: {
         title: string;
         artist: string;
+        youtubeUrl?: string;
     };
     articles: Array<{
         title: string;

@@ -69,12 +69,25 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
 
     const t = translations[language] || translations.en;
 
-    // A helper to potentially format YouTube links if we wanted to embed, 
-    // but for now we follow the structure from CSS which expects an iframe.
-    // If the data doesn't provide an ID, we'll just show the title.
-    const youtubeId = data.music?.title?.includes('youtube.com') || data.music?.title?.includes('youtu.be') 
-        ? data.music.title.split('v=')[1]?.split('&')[0] || data.music.title.split('/').pop()
-        : null;
+    // Improved YouTube ID extraction
+    const getYouTubeEmbedUrl = (musicData: any) => {
+        if (musicData.youtubeUrl) return musicData.youtubeUrl;
+        const title = musicData.title || '';
+        const id = title.includes('youtube.com') || title.includes('youtu.be')
+            ? title.split('v=')[1]?.split('&')[0] || title.split('/').pop()
+            : null;
+        return id ? `https://www.youtube.com/embed/${id}` : null;
+    };
+
+    const embedUrl = getYouTubeEmbedUrl(data.music);
+
+    const medalTable = [
+        { rank: 1, country: "Norway", flag: "🇳🇴" },
+        { rank: 2, country: "Germany", flag: "🇩🇪" },
+        { rank: 3, country: "USA", flag: "🇺🇸" },
+        { rank: 4, country: "Italy", flag: "🇮🇹" },
+        { rank: 5, country: "Canada", flag: "🇨🇦" }
+    ];
 
     return (
         <div className="results-container">
@@ -90,10 +103,10 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
                         <Music className="icon" size={24} />
                         <h3>{t.musicHeader}</h3>
                     </div>
-                    {youtubeId && (
+                    {embedUrl && (
                         <div className="video-wrapper">
                             <iframe
-                                src={`https://www.youtube.com/embed/${youtubeId}`}
+                                src={embedUrl}
                                 title="YouTube video player"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
@@ -157,6 +170,21 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
                                 View Highlight <ExternalLink size={14} style={{ display: 'inline' }} />
                             </a>
                         )}
+
+                        <div className="medal-mini-table" style={{ marginTop: '1.5rem', textAlign: 'left' }}>
+                            <h4 style={{ fontSize: '0.9rem', color: 'var(--winter-text-light)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                2026 Winter Games Rankings
+                            </h4>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', fontSize: '0.85rem' }}>
+                                {medalTable.map((item) => (
+                                    <div key={item.rank} className="medal-row" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        <span style={{ fontWeight: 700 }}>{item.rank}.</span>
+                                        <span>{item.flag}</span>
+                                        <span>{item.country}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

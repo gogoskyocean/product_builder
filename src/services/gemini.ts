@@ -66,10 +66,10 @@ export const analyzeMood = async (text: string, language: Language) => {
     Return ONLY a raw JSON object (no markdown) with this structure:
     {
       "moodSummary": "One sentence summary of their mood in ${targetLang}.",
-      "music": { "title": "Song Title", "artist": "Artist Name" },
+      "music": { "title": "Song Title", "artist": "Artist Name", "youtubeUrl": "YouTube embed URL (format: https://www.youtube.com/embed/...)" },
       "articles": [{ "title": "Title", "url": "URL" }],
       "items": [{ "name": "Item", "link": "URL" }],
-      "olympics": { "sport": "Winter Olympic Sport ONLY", "reason": "Reason", "highlightUrl": "URL" }
+      "olympics": { "sport": "Winter Olympic Sport ONLY", "reason": "Reason related to 2026 Winter Olympics", "highlightUrl": "A YouTube link to Olympic highlights" }
     }
   `;
 
