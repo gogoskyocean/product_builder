@@ -80,7 +80,33 @@ export const analyzeMood = async (text: string, language: Language) => {
     generationConfig: {
       temperature: 0.9,
       maxOutputTokens: 2048,
-    }
+    },
+    safetySettings: [
+      { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+    ]
+  };
+
+  const getFallbackResult = (lang: Language): any => {
+    const fallbacks: Record<string, any> = {
+      en: {
+        moodSummary: "Your heart is expressing a complex and intense energy right now.",
+        music: { title: "Spiritual Journey", artist: "Meditation Music", youtubeUrl: "https://www.youtube.com/embed/S2pETo0zY-U" },
+        articles: [{ title: "Finding Balance in Intense Emotions", url: "https://www.psychologytoday.com" }],
+        items: [{ name: "Calming Incense", link: "https://www.amazon.com" }],
+        olympics: { sport: "Curling", reason: "Focus and precision to calm the storm.", highlightUrl: "https://www.youtube.com/user/olympic" }
+      },
+      kr: {
+        moodSummary: "지금 당신의 마음은 매우 강렬하고 복잡한 에너지를 표현하고 있군요.",
+        music: { title: "영적 여행", artist: "명상 음악", youtubeUrl: "https://www.youtube.com/embed/S2pETo0zY-U" },
+        articles: [{ title: "강렬한 감정 속에서 균형 찾기", url: "https://www.mentalhealth.or.kr" }],
+        items: [{ name: "심신 안정 향초", link: "https://www.coupang.com" }],
+        olympics: { sport: "컬링", reason: "폭풍을 잠재우는 집중력과 정교함이 필요한 때입니다.", highlightUrl: "https://www.youtube.com/user/olympic" }
+      }
+    };
+    return fallbacks[lang] || fallbacks.en;
   };
 
   try {
@@ -96,17 +122,18 @@ export const analyzeMood = async (text: string, language: Language) => {
     if (!response.ok) {
       const errorData = await response.json();
       console.error("REST API Error Response:", errorData);
-      throw new Error(`API Error: ${response.status} ${response.statusText} - ${errorData.error?.message || 'Unknown error'}`);
+      return getFallbackResult(language);
     }
 
     const data = await response.json();
     let generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!generatedText) {
-      throw new Error("No content generated");
+      console.warn("No content generated or blocked by safety filters. Using fallback.");
+      return getFallbackResult(language);
     }
 
-    console.log("Gemini Raw Output:", generatedText); // Debugging
+    console.log("Gemini Raw Output:", generatedText);
 
     // Clean up markdown code blocks if present
     generatedText = generatedText.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -117,13 +144,18 @@ export const analyzeMood = async (text: string, language: Language) => {
 
     if (jsonStart !== -1 && jsonEnd !== -1) {
       const jsonString = generatedText.substring(jsonStart, jsonEnd + 1);
-      return JSON.parse(jsonString);
+      try {
+        return JSON.parse(jsonString);
+      } catch (parseError) {
+        console.error("JSON Parse Error, using fallback:", parseError);
+        return getFallbackResult(language);
+      }
     }
 
-    throw new Error("Invalid format: No JSON object found");
+    return getFallbackResult(language);
 
   } catch (error) {
-    console.error("Global Error:", error);
-    throw error;
+    console.error("Global Error, using fallback:", error);
+    return getFallbackResult(language);
   }
 };
