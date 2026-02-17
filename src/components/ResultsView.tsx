@@ -69,17 +69,21 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
 
     const t = translations[language] || translations.en;
 
-    // Improved YouTube ID extraction
+    // Robust YouTube URL extraction
     const getYouTubeEmbedUrl = (musicData: any) => {
-        if (musicData.youtubeUrl) return musicData.youtubeUrl;
-        const title = musicData.title || '';
-        const id = title.includes('youtube.com') || title.includes('youtu.be')
-            ? title.split('v=')[1]?.split('&')[0] || title.split('/').pop()
-            : null;
+        if (!musicData) return null;
+        if (musicData.youtubeUrl && musicData.youtubeUrl.includes('embed')) return musicData.youtubeUrl;
+
+        // Try to extract ID from provided URL or title
+        const source = musicData.youtubeUrl || musicData.title || '';
+        const idMatch = source.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*embed\/))([^"&?\/\s]{11})/);
+        const id = idMatch ? idMatch[1] : null;
+
         return id ? `https://www.youtube.com/embed/${id}` : null;
     };
 
     const embedUrl = getYouTubeEmbedUrl(data.music);
+    const rawYouTubeLink = data.music?.youtubeUrl || (data.music?.title?.includes('http') ? data.music.title : `https://www.youtube.com/results?search_query=${encodeURIComponent(data.music?.title + ' ' + data.music?.artist)}`);
 
     const medalTable = [
         { rank: 1, country: "Norway", flag: "🇳🇴" },
@@ -103,7 +107,7 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
                         <Music className="icon" size={24} />
                         <h3>{t.musicHeader}</h3>
                     </div>
-                    {embedUrl && (
+                    {embedUrl ? (
                         <div className="video-wrapper">
                             <iframe
                                 src={embedUrl}
@@ -112,9 +116,22 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
                                 allowFullScreen
                             ></iframe>
                         </div>
+                    ) : (
+                        <div className="video-wrapper" style={{ background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '1rem' }}>
+                            <p style={{ color: 'var(--winter-text-light)', fontSize: '0.9rem' }}>Music player loading or unavailable</p>
+                        </div>
                     )}
                     <p style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.2rem' }}>{data.music.title}</p>
-                    <p className="card-caption">{data.music.artist}</p>
+                    <p className="card-caption" style={{ marginBottom: '1rem' }}>{data.music.artist}</p>
+                    <a
+                        href={rawYouTubeLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="highlight-link"
+                        style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                        Play on YouTube <ExternalLink size={12} />
+                    </a>
                 </div>
 
                 {/* Articles/Reading Section */}
@@ -171,16 +188,15 @@ const ResultsView: React.FC<ResultsViewProps> = ({ data, onReset, language }) =>
                             </a>
                         )}
 
-                        <div className="medal-mini-table" style={{ marginTop: '1.5rem', textAlign: 'left' }}>
-                            <h4 style={{ fontSize: '0.9rem', color: 'var(--winter-text-light)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                                2026 Winter Games Rankings
+                        <div className="medal-mini-table" style={{ marginTop: '1.5rem', background: 'rgba(255,255,255,0.5)', padding: '1rem', borderRadius: '15px', border: '1px solid rgba(0,0,0,0.05)' }}>
+                            <h4 style={{ fontSize: '0.85rem', color: 'var(--winter-deep-blue)', marginBottom: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Trophy size={14} /> 2026 Winter Games Rankings
                             </h4>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', fontSize: '0.85rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '8px' }}>
                                 {medalTable.map((item) => (
-                                    <div key={item.rank} className="medal-row" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                        <span style={{ fontWeight: 700 }}>{item.rank}.</span>
-                                        <span>{item.flag}</span>
-                                        <span>{item.country}</span>
+                                    <div key={item.rank} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '8px', background: 'white', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.03)' }}>
+                                        <span style={{ fontSize: '1.2rem' }}>{item.flag}</span>
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--winter-text-light)' }}>{item.country}</span>
                                     </div>
                                 ))}
                             </div>
