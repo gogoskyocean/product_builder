@@ -86,7 +86,8 @@ header {
   color: #1e3a8a;
   /* Darker blue for contrast */
   margin-bottom: 3rem;
-  max-width: 600px;
+  max-width: 900px;
+  width: fit-content;
   font-weight: 600;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
   background: rgba(255, 255, 255, 0.4);
