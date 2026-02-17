@@ -42,8 +42,18 @@ function App() {
         {loading ? (
           <div className="loading-container" style={{ textAlign: 'center', color: 'var(--winter-deep-blue)' }}>
             <Loader2 className="animate-spin" size={48} style={{ margin: '0 auto 1rem' }} />
-            <p style={{ fontSize: '1.2rem' }}>
-              {language === 'en' ? "Analyzing your path..." : "당신의 감정을 분석하고 길을 찾는 중..."}
+            <p style={{ fontSize: '1.2rem', fontWeight: 600 }}>
+              {(() => {
+                const msgs = {
+                  en: "Analyzing your path...",
+                  kr: "당신의 감정을 분석하고 길을 찾는 중...",
+                  es: "Analizando tu camino...",
+                  cn: "正在分析您的路径...",
+                  jp: "あなたの道を分析中...",
+                  fr: "Analyse de votre chemin..."
+                };
+                return msgs[language] || msgs.en;
+              })()}
             </p>
           </div>
         ) : result ? (
